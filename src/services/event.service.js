@@ -3,10 +3,10 @@ const Event = require("../models/event.model");
 // Create
 async function createEvent(eventData) {
     try {
-      const event = await Event.create(eventData);
-      return event;
+      const Event = await Event.create(eventData);
+      return Event;
     } catch (error) {
-      throw new Error('Error creating event:', error);
+      throw new Error('Error creating Event:', error);
     }
   }
   
@@ -20,13 +20,13 @@ async function createEvent(eventData) {
     }
   }
   
-  // Read (Get event by ID)
+  // Read (Get Event by ID)
   async function getEventById(eventId) {
     try {
-      const event = await Event.findByPk(eventId);
-      return event;
+      const Event = await Event.findByPk(eventId);
+      return Event;
     } catch (error) {
-      throw new Error('Error getting event by ID:', error);
+      throw new Error('Error getting Event by ID:', error);
     }
   }
   
@@ -44,7 +44,7 @@ async function createEvent(eventData) {
         throw new Error('Event not found');
       }
     } catch (error) {
-      throw new Error('Error updating event:', error);
+      throw new Error('Error updating Event:', error);
     }
   }
   
@@ -61,7 +61,7 @@ async function createEvent(eventData) {
         throw new Error('Event not found');
       }
     } catch (error) {
-      throw new Error('Error deleting event:', error);
+      throw new Error('Error deleting Event:', error);
     }
   }
   

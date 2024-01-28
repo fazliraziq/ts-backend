@@ -1,24 +1,28 @@
-const { DataTypes } = require('sequelize');
+const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../config/config');
 
-const Review = sequelize.define('Review', {
+class Review extends Model {
+  static associate(models) {
+    Review.hasOne(models.Event, { as: 'events' });
+    Review.hasOne(models.User, { as: 'users' });
+  }
+}
+
+Review.init({
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true
-  },
-  userId: {
-    type: DataTypes.INTEGER
-  },
-  eventId: {
-    type: DataTypes.INTEGER,
   },
   review: {
     type: DataTypes.STRING,
   },
   rating: {
     type: DataTypes.INTEGER,
-  },
+  }
+},{
+  sequelize,
+  modelName: 'Review'
 });
 
 module.exports = Review;

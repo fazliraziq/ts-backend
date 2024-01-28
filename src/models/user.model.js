@@ -1,7 +1,13 @@
-const { DataTypes } = require('sequelize');
+const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../config/config');
+const Ticket = require('./ticket.model');
+const Review = require('./reviews.model');
+const Bill = require('./billing.model');
+const Event = require('./event.model');
 
-const User = sequelize.define('User', {
+class User extends Model {}
+
+User.init({
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -26,6 +32,14 @@ const User = sequelize.define('User', {
   contact: {
     type: DataTypes.STRING,
   },
+},{
+  sequelize,
+  modelName: 'User'
 });
+
+User.hasMany(Event,{as: 'events'});
+User.hasMany(Bill,{as: 'bills'});
+User.hasMany(Review,{as: 'reviews'});
+User.hasMany(Ticket,{as: 'tickets'});
 
 module.exports = User;

@@ -1,17 +1,23 @@
-const { DataTypes } = require('sequelize');
+const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../config/config');
-const User = require('./user.model');
-const Event = require('./event.model');
-const Ticket = require('./ticket.model');
 
-const Bill = sequelize.define('Bill', {
+class Bill extends Model {
+  static associate(models) {
+    Bill.hasMany(models.Event, { as: 'events' });
+    Bill.hasMany(models.User, { as: 'users' });
+    Bill.hasOne(models.Ticket, { as: 'tickets' });
+  }
+}
+
+Bill.init({
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true
   },
   transactionId: {
-    type: DataTypes.UUIDV4
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4
   },
   price: {
     type: DataTypes.INTEGER,
@@ -30,10 +36,9 @@ const Bill = sequelize.define('Bill', {
   totalPrice: {
     type: DataTypes.INTEGER,
   },
+},{
+  sequelize,
+  modelName: 'Bill'
 });
-
-Bill.belongsTo(Event);
-Bill.belongsTo(Ticket);
-Bill.belongsTo(User);
 
 module.exports = Bill;
