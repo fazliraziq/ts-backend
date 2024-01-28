@@ -1,28 +1,31 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user.model');
+const CONSTANTS = require('../helper/constant.helper')
 
 async function registerUser(req, res) {
     try {
-      console.log('register function called !!')
           const { username, name , password, email , contact } = req.body;    
-          await bcrypt.hash(password, 10, async (err, hash) => {
+          await bcrypt.hash(password, process.env.SALT_ROUND , async (err, hash) => {
               if (err) {
-              console.error('Error hashing password:', err);
+                res.status(500).json({ error: CONSTANTS.SERVER_ERROR });
               } else {
-              const user = await User.create({
-                  username,
-                  name,
-                  password: hash,
-                  email,
-                  contact
-                  });
-                  res.json({ message: 'User registered successfully', user });
+                try{
+                  const user = await User.create({
+                    username,
+                    name,
+                    password: hash,
+                    email,
+                    contact
+                    });
+                    res.json({ message: CONSTANTS.USER_REGISTRATION_SUCCESS, user });
+                }catch(error){
+                  res.status(409).json({ error: CONSTANTS.USER_EXISTS });
+                }
               }
           });
     } catch (error) {
-      console.error('Error registering user:', error.message);
-      res.status(500).json({ error: 'Internal Server Error' });
+      res.status(500).json({ error: CONSTANTS.SERVER_ERROR });
     }
 }
 
@@ -32,15 +35,14 @@ async function loginUser(req, res) {
       const user = await User.findOne({ where: { username } });
   
       if (!user || !(await bcrypt.compare(password, user.password))) {
-        return res.status(401).json({ error: 'Invalid username or password' });
+        return res.status(401).json({ error: CONSTANTS.INVALID_USER_PASSWORD });
       }
   
-      const token = jwt.sign({ userId: user.id }, 'your-secret-key', { expiresIn: '1h' });
+      const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRY });
   
-      res.json({ message: 'Login successful', token });
+      res.json({ message: CONSTANTS.LOGIN_SUCCESS, token });
     } catch (error) {
-      console.error('Error logging in:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+      res.status(500).json({ error: CONSTANTS.SERVER_ERROR });
     }
 }
 
