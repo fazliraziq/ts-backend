@@ -6,8 +6,9 @@ const CONSTANTS = require('../helper/constant.helper')
 async function registerUser(req, res) {
     try {
           const { username, name , password, email , contact } = req.body;    
-          await bcrypt.hash(password, process.env.SALT_ROUND , async (err, hash) => {
+          await bcrypt.hash(password, parseInt(process.env.SALT_ROUND) , async (err, hash) => {
               if (err) {
+                console.log('server error :', err.message);
                 res.status(500).json({ error: CONSTANTS.SERVER_ERROR });
               } else {
                 try{
@@ -25,6 +26,7 @@ async function registerUser(req, res) {
               }
           });
     } catch (error) {
+      console.log('server error :', error.message);
       res.status(500).json({ error: CONSTANTS.SERVER_ERROR });
     }
 }
@@ -42,6 +44,7 @@ async function loginUser(req, res) {
   
       res.json({ message: CONSTANTS.LOGIN_SUCCESS, token });
     } catch (error) {
+      console.log("Server Error : ", error.message)
       res.status(500).json({ error: CONSTANTS.SERVER_ERROR });
     }
 }

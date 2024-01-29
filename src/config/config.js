@@ -5,7 +5,7 @@ const sequelize = new Sequelize('ts_db', 'root', '', {
     dialect: 'mysql'
   });
 
-sequelize.sync({ force: true }).then(() => {
+sequelize.sync({ force: false }).then(() => {
 console.log('Models synchronized with the database.');
 });
 

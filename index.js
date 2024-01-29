@@ -9,7 +9,7 @@ const ticketRoute = require('./src/routes/ticket.route');
 const billRoute = require('./src/routes/bill.route');
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3005;
 
 app.use(cors());
 app.use(bodyParser.json());

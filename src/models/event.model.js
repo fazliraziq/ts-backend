@@ -5,11 +5,7 @@ const Bill = require('./billing.model');
 const User = require('./user.model');
 const Review = require('./reviews.model');
 
-class Event extends Model {
-  static associate(models) {
-    Event.hasOne(models.User, { as: 'creator' });
-  }
-}
+class Event extends Model {}
 
 Event.init({
   id: {
@@ -36,6 +32,9 @@ Event.init({
   totalTickets: {
     type: DataTypes.INTEGER,
   },
+  ticketPrice: {
+    type: DataTypes.INTEGER,
+  },
   availableTicket: {
     type: DataTypes.INTEGER,
   },
@@ -55,6 +54,13 @@ Event.init({
   isActive: {
     type: DataTypes.BOOLEAN,
     defaultValue: true,
+  },
+  UserId:{
+    type: DataTypes.INTEGER,
+    references: {
+      model: 'User',
+      key: 'id'
+    }
   }
 },{
   sequelize,

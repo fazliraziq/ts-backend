@@ -37,7 +37,7 @@ User.init({
   modelName: 'User'
 });
 
-User.hasMany(Event,{as: 'events'});
+User.hasMany(Event,{as: 'events' , foreignKey: 'userId'});
 User.hasMany(Bill,{as: 'bills'});
 User.hasMany(Review,{as: 'reviews'});
 User.hasMany(Ticket,{as: 'tickets'});
